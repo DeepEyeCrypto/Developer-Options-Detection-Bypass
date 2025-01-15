@@ -26,7 +26,13 @@ install_dependencies() {
   
   # Install Python and pip
   pkg install -y python || error_exit "Failed to install Python."
-  pip install frida frida-tools || error_exit "Failed to install frida and frida-tools via pip."
+  
+  # Install Frida and frida-tools via pip with error handling
+  pip install frida frida-tools
+  if [ $? -ne 0 ]; then
+    log "Failed to install frida and frida-tools via pip. Attempting installation via alternative method..."
+    pip install --pre frida || error_exit "Failed to install frida via alternative method."
+  fi
   
   # Install ADB
   log "Installing ADB..."
