@@ -100,41 +100,18 @@ cleanup() {
   rm -f frida-server.xz bypass_dev_opts.js || error_exit "Failed to clean up temporary files."
 }
 
-# Menu for user to select an action
-show_menu() {
-  echo "Select an option:"
-  echo "1) Install Dependencies"
-  echo "2) Check ADB Status"
-  echo "3) Fix Issues (Download and setup Frida server, Disable Developer Options)"
-  echo "4) Exit"
-  read -p "Enter your choice [1-4]: " choice
-
-  case $choice in
-    1)
-      install_dependencies
-      ;;
-    2)
-      check_adb
-      ;;
-    3)
-      install_dependencies
-      check_adb
-      setup_frida_server
-      start_frida_server
-      create_frida_hook_script
-      disable_developer_options
-      attach_frida_to_app
-      cleanup
-      ;;
-    4)
-      exit 0
-      ;;
-    *)
-      echo "Invalid option. Please select a valid option."
-      show_menu
-      ;;
-  esac
+# Main function
+main() {
+  install_dependencies
+  check_adb
+  setup_frida_server
+  start_frida_server
+  create_frida_hook_script
+  disable_developer_options
+  attach_frida_to_app
+  cleanup
+  log "[+] All set! Developer Options Bypass applied."
 }
 
-# Execute menu function
-show_menu
+# Execute main function
+main
