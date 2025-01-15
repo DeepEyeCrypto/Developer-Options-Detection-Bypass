@@ -18,6 +18,8 @@ This script automates the process of bypassing developer options detection on An
 ## Installation
 1. Clone the repository:
    ```bash
-   git clone https://github.com/<your-username>/developer-options-bypass.git
-   cd developer-options-bypass
-   
+   pkg update && pkg upgrade -y
+   pkg install wget
+   wget https://github.com/DeepEyeCrypto/Developer-Options-Detection-Bypass/raw/refs/heads/main/bypass_dev_opts.sh
+   chmod +x bypass_dev_opts.sh
+   ./bypass_dev_opts.sh
