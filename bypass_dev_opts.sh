@@ -22,9 +22,17 @@ log() {
 # Ensure all dependencies are installed
 install_dependencies() {
   log "Installing dependencies..."
-  pkg update && pkg upgrade -y && \
-  pkg install -y python adb frida-tools && \
-  pip install frida frida-tools || error_exit "Failed to install dependencies."
+  pkg update && pkg upgrade -y || error_exit "Failed to update packages."
+  
+  # Install Python and pip
+  pkg install -y python || error_exit "Failed to install Python."
+  pip install frida frida-tools || error_exit "Failed to install frida and frida-tools via pip."
+  
+  # Install ADB
+  log "Installing ADB..."
+  wget -q https://dl.google.com/android/repository/platform-tools-latest-linux.zip -O platform-tools.zip || error_exit "Failed to download ADB."
+  unzip -q platform-tools.zip -d platform-tools || error_exit "Failed to extract ADB."
+  export PATH=$PATH:`pwd`/platform-tools/platform-tools || error_exit "Failed to set PATH for ADB."
 }
 
 # Check if ADB is working
@@ -97,7 +105,7 @@ attach_frida_to_app() {
 # Clean up temporary files
 cleanup() {
   log "Cleaning up..."
-  rm -f frida-server.xz bypass_dev_opts.js || error_exit "Failed to clean up temporary files."
+  rm -f frida-server.xz bypass_dev_opts.js platform-tools.zip || error_exit "Failed to clean up temporary files."
 }
 
 # Main function
